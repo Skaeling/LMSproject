@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from lms.models import Course, Lesson
 
 
 class User(AbstractUser):
@@ -21,3 +22,9 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
+class Payments(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
+    payment_date = models.DateTimeField(auto_now_add=True)
+    course_paid = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='paid_courses')
+    lesson_paid = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='paid_lessons')
+    payment_amount = models.PositiveIntegerField()
