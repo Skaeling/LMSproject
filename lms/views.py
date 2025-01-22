@@ -4,6 +4,7 @@ from rest_framework import generics
 from lms.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer
 
 from lms.models import Course, Lesson
+from users.permissions import LMSAccessPermission
 
 
 class CourseViewSet(ModelViewSet):
@@ -14,10 +15,24 @@ class CourseViewSet(ModelViewSet):
             return CourseDetailSerializer
         return CourseSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_permissions(self):
+        if self.action in ['create', 'destroy']:
+            self.permission_classes = (~LMSAccessPermission,)
+        elif self.action in ['update', 'retrieve']:
+            self.permission_classes = (LMSAccessPermission,)
+        return super().get_permissions()
+
 
 class LessonCreateAPIView(generics.CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (~LMSAccessPermission,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -38,3 +53,4 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (~LMSAccessPermission,)
