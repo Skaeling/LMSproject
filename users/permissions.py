@@ -14,3 +14,10 @@ class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
+
+
+class IsUser(permissions.BasePermission):
+    """Возвращает True, если профиль принадлежит текущему юзеру"""
+
+    def has_object_permission(self, request, view, obj):
+        return obj == request.user
