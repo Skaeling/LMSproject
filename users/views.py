@@ -49,8 +49,7 @@ class UserDeleteAPIView(DestroyAPIView):
 
 class PaymentViewSet(ModelViewSet):
     queryset = Payment.objects.all()
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter ]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ('course_paid', 'lesson_paid', 'payment_method')
     ordering_fileds = ('payment_date',)
     serializer_class = PaymentSerializer
-
