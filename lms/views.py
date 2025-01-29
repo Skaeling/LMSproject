@@ -78,8 +78,8 @@ class SubscribeCreateAPIView(generics.CreateAPIView):
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'подписка удалена'
+            message = f'Подписка на курс {course_item.title} удалена'
         else:
             subs_item.create(user=user, course=course_item)
-            message = 'подписка добавлена'
+            message = f'Подписка на курс {course_item.title} добавлена'
         return Response({"message": message})

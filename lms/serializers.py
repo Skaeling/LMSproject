@@ -5,11 +5,17 @@ from lms.validators import validate_video_url
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    video_url = serializers.CharField(validators=[validate_video_url])
+    video_url = serializers.CharField(required=False, allow_blank=True, validators=[validate_video_url])
 
     class Meta:
         model = Lesson
         fields = '__all__'
+
+    def validate(self, data):
+        if 'video_url' in data and not data['video_url']:
+            # Удаляем поле video_url до валидации, если оно не содержит данных
+            data.pop('video_url')
+        return data
 
 
 class CourseSerializer(serializers.ModelSerializer):
