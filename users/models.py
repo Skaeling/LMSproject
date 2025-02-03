@@ -32,13 +32,16 @@ class Payment(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_payments')
-    payment_date = models.DateTimeField(auto_now_add=True)
+    payment_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата оплаты')
     course_paid = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='paid_courses', blank=True,
                                     null=True)
     lesson_paid = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='paid_lessons', blank=True,
                                     null=True)
-    payment_amount = models.PositiveIntegerField()
-    payment_method = models.CharField(max_length=4, choices=PAYMENT_METHOD_CHOICES)
+    payment_amount = models.PositiveIntegerField(verbose_name='Сумма к оплате')
+    payment_method = models.CharField(max_length=4, choices=PAYMENT_METHOD_CHOICES, verbose_name="Метод оплаты")
+    session_id = models.URLField(max_length=400, blank=True, null=True, verbose_name="Ссылка на оплату")
+    payment_link = models.CharField(max_length=400, blank=True, null=True, verbose_name='Id сессии')
+    status = models.CharField(max_length=100, blank=True, null=True, verbose_name="Статус транзакции")
 
     def __str__(self):
         return f"{self.user}, {self.payment_date}," \
