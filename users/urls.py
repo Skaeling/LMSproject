@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 from users.apps import UsersConfig
 from users.views import (PaymentViewSet, UserCreateAPIView, UserDeleteAPIView,
                          UserListAPIView, UserRetrieveAPIView,
-                         UserUpdateAPIView)
+                         UserUpdateAPIView, PaymentCreateAPIView, PaymentRetrieveAPIView)
 
 app_name = UsersConfig.name
 router = SimpleRouter()
@@ -29,4 +29,6 @@ urlpatterns = [
         name="token_refresh",
     ),
     path("profile/delete/<int:pk>/", UserDeleteAPIView.as_view(), name="user_delete"),
+    path("payment/create/", PaymentCreateAPIView.as_view(), name='stripe_payment'),
+    path("payment/<int:pk>/", PaymentRetrieveAPIView.as_view(), name='stripe_payment_retrieve'),
 ] + router.urls

@@ -34,6 +34,7 @@ class CourseViewSet(ModelViewSet):
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
+    """Создает урок, назначая создателя владельцем урока"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, ~IsModer,)
@@ -43,30 +44,35 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 
 class LessonListAPIView(generics.ListAPIView):
+    """Представляет список уроков"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     pagination_class = LMSPaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
+    """Представляет урок по переданному pk"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, IsModer | IsOwner,)
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
+    """Обновляет урок по переданному pk"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, IsModer | IsOwner,)
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
+    """Удаляет урок по указанному pk"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, ~IsModer | IsOwner,)
 
 
 class SubscribeCreateAPIView(generics.CreateAPIView):
+    """Обновляет статус подписки на противоположный текущему"""
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
