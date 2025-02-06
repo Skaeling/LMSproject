@@ -1,92 +1,110 @@
 [
-  {
-    "model": "lms.course",
-    "pk": 1,
-    "fields": {
-      "title": "Python",
-      "preview": "",
-      "description": "Мультипарадигменный язык программирования.",
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.course",
-    "pk": 2,
-    "fields": {
-      "title": "Java",
-      "preview": "",
-      "description": "Многоплатформенный, объектно-ориентированный и сетецентрический язык",
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.course",
-    "pk": 3,
-    "fields": {
-      "title": "Ruby",
-      "preview": "",
-      "description": "Динамический, рефлективный, интерпретируемый высокоуровневый язык программирования",
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.lesson",
-    "pk": 1,
-    "fields": {
-      "title": "Backend-разработчик",
-      "description": "10 месяцев",
-      "preview": "",
-      "video_url": null,
-      "course": 1,
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.lesson",
-    "pk": 2,
-    "fields": {
-      "title": "Django",
-      "description": null,
-      "preview": "",
-      "video_url": null,
-      "course": 1,
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.lesson",
-    "pk": 3,
-    "fields": {
-      "title": "Java-разработчик",
-      "description": "10 месяцев",
-      "preview": "",
-      "video_url": null,
-      "course": 2,
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.lesson",
-    "pk": 4,
-    "fields": {
-      "title": "Hibernate ORM",
-      "description": "40 часов",
-      "preview": "",
-      "video_url": null,
-      "course": 2,
-      "owner": null
-    }
-  },
-  {
-    "model": "lms.lesson",
-    "pk": 5,
-    "fields": {
-      "title": "Sinatra",
-      "description": null,
-      "preview": "",
-      "video_url": null,
-      "course": 3,
-      "owner": null
-    }
+{
+  "model": "lms.course",
+  "pk": 1,
+  "fields": {
+    "title": "Python",
+    "preview": "",
+    "description": "Мультипарадигменный язык программирования.",
+    "owner": null,
+    "price": "30000.00",
+    "updated_at": "2025-02-06T11:56:54.066Z"
   }
+},
+{
+  "model": "lms.course",
+  "pk": 2,
+  "fields": {
+    "title": "Java",
+    "preview": "",
+    "description": "Многоплатформенный, объектно-ориентированный и сетецентрический язык",
+    "owner": null,
+    "price": "40000.00",
+    "updated_at": "2025-02-06T11:56:54.066Z"
+  }
+},
+{
+  "model": "lms.course",
+  "pk": 3,
+  "fields": {
+    "title": "Ruby",
+    "preview": "",
+    "description": "Динамический, рефлективный, интерпретируемый высокоуровневый язык программирования",
+    "owner": null,
+    "price": "50000.00",
+    "updated_at": "2025-02-06T11:56:54.066Z"
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 1,
+  "fields": {
+    "title": "Backend-разработчик",
+    "description": "10 месяцев",
+    "preview": "",
+    "video_url": null,
+    "course": 1,
+    "owner": null
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 2,
+  "fields": {
+    "title": "Django",
+    "description": null,
+    "preview": "",
+    "video_url": null,
+    "course": 1,
+    "owner": null
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 3,
+  "fields": {
+    "title": "Java-разработчик",
+    "description": "10 месяцев",
+    "preview": "",
+    "video_url": null,
+    "course": 2,
+    "owner": null
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 4,
+  "fields": {
+    "title": "Hibernate ORM",
+    "description": "40 часов",
+    "preview": "",
+    "video_url": null,
+    "course": 2,
+    "owner": null
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 5,
+  "fields": {
+    "title": "Sinatra",
+    "description": null,
+    "preview": "",
+    "video_url": null,
+    "course": 3,
+    "owner": null
+  }
+},
+{
+  "model": "lms.lesson",
+  "pk": 7,
+  "fields": {
+    "title": "DRF",
+    "description": null,
+    "preview": "",
+    "video_url": null,
+    "course": null,
+    "owner": 16
+  }
+}
 ]

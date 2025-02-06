@@ -9,6 +9,8 @@ class Course(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name='Описание курса')
     owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
                               verbose_name='Владелец')
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 
     class Meta:
         verbose_name = 'Курс'

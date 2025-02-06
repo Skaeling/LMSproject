@@ -1,5 +1,7 @@
+import datetime
+
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
@@ -8,6 +10,7 @@ from lms.paginators import LMSPaginator
 from lms.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscriptionSerializer
 
 from lms.models import Course, Lesson, Subscription
+from lms.tasks import send_notification
 from users.permissions import IsModer, IsOwner
 
 
@@ -28,9 +31,19 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (~IsModer,)
         elif self.action in ['update', 'partial_update', 'retrieve']:
             self.permission_classes = (IsModer | IsOwner,)
+            # self.permission_classes = (AllowAny,)
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """При условии отсутствия обновления курса в прошедшие 4 часа отправляет подписчикам электронное уведомление"""
+
+        last_updated = serializer.instance.updated_at
+        course = serializer.save()
+        time_difference = course.updated_at - last_updated
+        if course.is_subscribed.exists() and time_difference > datetime.timedelta(hours=4):
+            send_notification.delay(course.pk)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
