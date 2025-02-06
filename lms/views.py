@@ -30,14 +30,15 @@ class CourseViewSet(ModelViewSet):
         if self.action == 'create':
             self.permission_classes = (~IsModer,)
         elif self.action in ['update', 'partial_update', 'retrieve']:
-            self.permission_classes = (IsModer | IsOwner,)
-            # self.permission_classes = (AllowAny,)
+            # self.permission_classes = (IsModer | IsOwner,)
+            self.permission_classes = (AllowAny,)
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
 
     def perform_update(self, serializer):
-        """При условии отсутствия обновления курса в прошедшие 4 часа отправляет подписчикам электронное уведомление"""
+        """При условии отсутствия обновления курса в прошедшие 4 часа
+        отправляет его подписчикам электронное уведомление"""
 
         last_updated = serializer.instance.updated_at
         course = serializer.save()
@@ -75,6 +76,13 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, IsModer | IsOwner,)
+    # permission_classes = (AllowAny,)
+
+    def perform_update(self, serializer):
+        """Обновляет дату обновления курса при обновлении входящего в него урока"""
+        course = serializer.instance.course
+        course.save(update_fields=['updated_at'])
+        serializer.save()
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
