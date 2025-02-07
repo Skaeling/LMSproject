@@ -1,7 +1,7 @@
 import datetime
 
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
@@ -30,15 +30,14 @@ class CourseViewSet(ModelViewSet):
         if self.action == 'create':
             self.permission_classes = (~IsModer,)
         elif self.action in ['update', 'partial_update', 'retrieve']:
-            # self.permission_classes = (IsModer | IsOwner,)
-            self.permission_classes = (AllowAny,)
+            self.permission_classes = (IsModer | IsOwner,)
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
 
     def perform_update(self, serializer):
-        """При условии отсутствия обновления курса в прошедшие 4 часа
-        отправляет его подписчикам электронное уведомление"""
+        """При наличии у курса подписчиков и отсутствии обновлений курса в прошедшие 4 часа
+        запускает задачу по отправке электронного уведомления его подписчикам"""
 
         last_updated = serializer.instance.updated_at
         course = serializer.save()
@@ -76,12 +75,12 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, IsModer | IsOwner,)
-    # permission_classes = (AllowAny,)
 
     def perform_update(self, serializer):
-        """Обновляет дату обновления курса при обновлении входящего в него урока"""
-        course = serializer.instance.course
-        course.save(update_fields=['updated_at'])
+        """Обновляет дату последнего обновления курса при обновлении входящего в него урока"""
+        if serializer.instance.course:
+            course = serializer.instance.course
+            course.save(update_fields=['updated_at'])
         serializer.save()
 
 

@@ -9,9 +9,11 @@ from lms.models import Course
 def send_notification(pk):
     course = Course.objects.get(pk=pk)
     emails = list(course.is_subscribed.all().values_list('user__email', flat=True))
-    send_mail(
-        subject='Ваш курс обновлён',
-        message='В курсе, на который вы подписаны, появились новые уроки',
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=emails
-    )
+    if emails:
+        send_mail(
+            subject='Ваш курс обновлён',
+            message='В курсе, на который вы подписаны, появились новые уроки',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=emails
+        )
+    return "No recipients"
