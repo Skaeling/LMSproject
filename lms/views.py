@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from lms.paginators import LMSPaginator
 from lms.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscriptionSerializer
 
 from lms.models import Course, Lesson, Subscription
+from lms.tasks import send_notification
 from users.permissions import IsModer, IsOwner
 
 
@@ -31,6 +34,16 @@ class CourseViewSet(ModelViewSet):
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """При наличии у курса подписчиков и отсутствии обновлений курса в прошедшие 4 часа
+        запускает задачу по отправке электронного уведомления его подписчикам"""
+
+        last_updated = serializer.instance.updated_at
+        course = serializer.save()
+        time_difference = course.updated_at - last_updated
+        if course.is_subscribed.exists() and time_difference > datetime.timedelta(hours=4):
+            send_notification.delay(course.pk)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -62,6 +75,13 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, IsModer | IsOwner,)
+
+    def perform_update(self, serializer):
+        """Обновляет дату последнего обновления курса при обновлении входящего в него урока"""
+        if serializer.instance.course:
+            course = serializer.instance.course
+            course.save(update_fields=['updated_at'])
+        serializer.save()
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
