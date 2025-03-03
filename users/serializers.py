@@ -22,7 +22,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'city', 'avatar', 'phone_number', 'user_payments']
+        fields = ['id', 'username', 'email', 'city', 'avatar', 'phone_number', 'user_payments', 'last_login']
 
 
 class UserGuestSerializer(serializers.ModelSerializer):
