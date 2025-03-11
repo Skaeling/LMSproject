@@ -1,6 +1,6 @@
 FROM nginx:latest
 
-RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
+RUN mkdir -p /app/staticfiles
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
