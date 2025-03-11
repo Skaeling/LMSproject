@@ -45,7 +45,7 @@ services:
   db:
     image: postgres:15.10
     env_file:
-      - .env
+      - ./.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -60,7 +60,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env
+      - ./.env
     depends_on:
       - web
       - redis
@@ -71,7 +71,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env
+      - ./.env
     depends_on:
       - celery
 
