@@ -13,6 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
+RUN sudo mkdir -p /app/staticfiles && sudo chmod -R 755 /app/staticfiles
 
 EXPOSE 8000
