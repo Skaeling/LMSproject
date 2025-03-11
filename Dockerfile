@@ -13,6 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
+RUN mkdir -p /home/admin/var/www/LMSproject/staticfiles && chmod -R 755 /home/admin/var/www/LMSproject/staticfiles
 
 EXPOSE 8000
