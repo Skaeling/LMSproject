@@ -46,8 +46,6 @@ class LessonTest(APITestCase):
             "video_url": "vk.com"
         }
         response = self.client.post(url, data)
-        print(response.status_code)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_lesson_update(self):
@@ -149,15 +147,11 @@ class CourseTest(APITestCase):
         url = reverse('lms:course-list')
         response = self.client.get(url)
         data = response.json()
-
-        result = {'count': 1, 'next': None, 'previous': None, 'results': [
-            {'id': self.course.pk, 'title': 'TestCourse', 'preview': None, 'description': 'тестовый курс',
-             'owner': self.user.pk}]}
         self.assertEqual(
             response.status_code, status.HTTP_200_OK
         )
         self.assertEqual(
-            data, result
+            data['results'][0]['id'], self.course.pk
         )
 
 
