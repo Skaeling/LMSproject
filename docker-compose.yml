@@ -1,7 +1,8 @@
 version: '3.9'
 
 services:
-  web:
+  lms:
+    container_name: lms
     build: .
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
@@ -26,7 +27,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - static_volume:/nginx/staticfiles
     depends_on:
-      - web
+      - lms
 
   redis:
     image: redis:latest
@@ -64,7 +65,7 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - web
+      - lms
       - redis
 
   celery_beat:

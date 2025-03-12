@@ -76,10 +76,10 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lmsproject:${{ github.sha }}
-          docker stop lmsproject || true
-          docker rm lmsproject || true
-          docker run -d --name lmsproject -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/lmsproject:${{ github.sha }}
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lms:${{ github.sha }}
+          docker stop lms || true
+          docker rm lms || true
+          docker run -d --name lms -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/lms:${{ github.sha }}
           EOF
           
           
