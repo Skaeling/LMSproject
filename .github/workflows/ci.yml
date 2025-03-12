@@ -79,7 +79,7 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lms:${{ github.sha }}
           docker stop lms || true
           docker rm lms || true
-          docker run -d --name lms --env-file ${{ secrets.DEPLOY_DIR }}/.env -p 80:8000 ${{ env.DOCKER_HUB_USERNAME }}/lms:${{ github.sha }}
+          docker run --env-file ${{ secrets.DEPLOY_DIR }}/.env -d --name lms -p 80:8000 ${{ env.DOCKER_HUB_USERNAME }}/lms:${{ github.sha }}
           EOF
           
           
