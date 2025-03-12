@@ -15,5 +15,5 @@ redis==5.2.1
 celery==5.4.0
 django-celery-beat==2.7.0
 flake8==7.1.1
-gunicorn
-django-redis
+gunicorn==23.0.0
+django-redis==5.4.0
