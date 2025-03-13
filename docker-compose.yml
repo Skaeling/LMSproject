@@ -1,26 +1,33 @@
 version: '3.9'
 
 services:
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/html:/usr/share/nginx/html
-  web:
+  lms:
+    container_name: lms
     build: .
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/code
-      - static_volume:/code/static
+      - .:/app
+      - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
+    env_file:
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/nginx/staticfiles
+    depends_on:
+      - lms
 
   redis:
     image: redis:latest
@@ -41,7 +48,7 @@ services:
   db:
     image: postgres:15.10
     env_file:
-      - .env
+      - ./.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -56,9 +63,9 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env
+      - ./.env
     depends_on:
-      - web
+      - lms
       - redis
 
   celery_beat:
@@ -67,7 +74,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env
+      - ./.env
     depends_on:
       - celery
 

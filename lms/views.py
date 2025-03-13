@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
 
-from lms.paginators import LMSPaginator
 from lms.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscriptionSerializer
 
 from lms.models import Course, Lesson, Subscription
